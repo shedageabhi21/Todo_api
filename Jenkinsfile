@@ -37,8 +37,16 @@ pipeline {
                 withCredentials([string(credentialsId: 'OWASP_Depcheck', variable: 'OWASP_KEY')]){
                     echo "Running OWASP Dependency Check"
                     dependencyCheck additionalArguments: '--scan ./ --format HTML --format XML --nvdApiKey $OWASP_KEY', odcInstallation: 'OWASP_depcheck'
+
+                    dependencyCheckPublisher pattern: 'dependency-check-report.xml', stopBuild: true, unstableTotalCritical: 1
                 }
             }
+        }
+    }
+    post{
+        always{
+            echo "Cleaning up the workspace"
+            cleanWs()
         }
     }
 }
