@@ -8,6 +8,7 @@ pipeline{
                 sh 'npm --version'
                 sh 'ip r'
                 sh 'ls -lh'
+                echo "checking the node version"
             }
             
         }
