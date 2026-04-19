@@ -1,4 +1,4 @@
-pipeline{
+pipeline {
     agent any
     tools {
         nodejs 'Node-24'
@@ -30,7 +30,15 @@ pipeline{
                 echo "Run the security audit tests"
                 sh "npm audit --audit-level=high"
             }
+            
+        }
+        stage("OWASP Dependency Check"){
+            steps{
+                withCredentials([string(credentialsId: 'OWASP_Depcheck', variable: 'OWASP_KEY')]){
+                    echo "Running OWASP Dependency Check"
+                    sh "dependencyCheck additionalArguments: '--scan ./ --format HTML --format XML --nvdApiKey $OWASP_KEY', odcInstallation: 'OWASP_depcheck'"
+                }
+            }
         }
     }
-    
 }
