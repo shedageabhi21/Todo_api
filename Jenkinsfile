@@ -48,7 +48,7 @@ pipeline {
     post{
         always{
             echo "Cleaning up the workspace"
-            cleanWs()
+        
         }
     }
 }
