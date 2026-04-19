@@ -34,7 +34,7 @@ app.delete('/todos/:id', (req, res) => {
   const index = todos.findIndex(t => t.id === parseInt(req.params.id));
   if (index === -1) return res.status(404).json({ error: 'Todo not found' });
   todos.splice(index, 1);
-  res.json({ message: 'Deleted successfully' });
+  res.json({ message: 'Deletedd successfully' });
 });
 
 app.resetTodos = () => { todos = []; nextId = 1; };
