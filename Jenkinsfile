@@ -4,16 +4,26 @@ pipeline{
         nodejs 'Node-24'
     }
     stages{
-        stage("cheking the node version"){
+        stage("Checkout code"){
             steps{
                 
-                sh 'node --version'
-                sh 'npm --version'
-                sh 'ip r'
-                sh 'ls -lh'
-                echo "checking the node version"
+            
+                echo "Cheking out the code from the git repository"
+                checkout scm
             }
             
+        }
+        stage("Install dependencies"){
+            steps{
+                echo "Installing dependencies"
+                sh "npm install"
+            }
+        }
+        stage("Lint tests"){
+            steps{
+                echo "Running the tests"
+                sh "npm run lint"
+            }
         }
     }
     
