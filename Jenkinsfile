@@ -25,6 +25,12 @@ pipeline{
                 sh "npm run lint"
             }
         }
+        stage("Audit tests"){
+            steps{
+                echo "Run the security audit tests"
+                sh "npm audit --audit-level=high"
+            }
+        }
     }
     
 }
