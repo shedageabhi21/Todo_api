@@ -48,6 +48,8 @@ pipeline {
             steps{
                 echo "Running the unit tests"
                 sh "npm test"
+
+                junit allowEmptyResults: true, testResults: 'test-results/junit.xml'
             }
         }
     }
