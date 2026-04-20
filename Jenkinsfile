@@ -44,6 +44,12 @@ pipeline {
                 }
             }
         }
+        stage("Unit tests"){
+            steps{
+                echo "Running the unit tests"
+                sh "npm test"
+            }
+        }
     }
     post{
         always{
