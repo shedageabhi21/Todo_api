@@ -50,16 +50,14 @@ pipeline {
                 sh "npm test"
 
                 junit allowEmptyResults: true, testResults: 'test-results/junit.xml'
-            }
-        }
-        stage("Code coverage"){
-            steps{
-                echo "Doing the code coverage analysis"
-                sh "npm run coverage"
 
                 publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Code_coverage_HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+
             }
         }
+        
+            
+        
     }
     post{
         always{
