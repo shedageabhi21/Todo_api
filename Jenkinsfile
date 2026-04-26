@@ -55,9 +55,17 @@ pipeline {
         stage ("Check the application running for testing"){
             steps{
                 input message: "Do you want to run the application for testing?", ok: "Run"
-                echo "Running the applicatino for 60 sec"
-                sh "npm start &"
-                sleep 60
+                echo "Checking the application is running with old code and kill it and re-run."
+                if (sh(script: "ps | grep node", returnStatus: true) == 0) {
+                    echo "Application is already running"
+                    sh "kill -9 $(sudo lsof -t -i:3000)"
+                    echo "Killed application process ID= $(sudo lsof -t -i:3000)"
+                } else {
+                    echo "We are running the application with the new code"
+                    sh "npm start &"
+                    sh "APP_PID=$!"
+                }
+                
             }
         }
         
