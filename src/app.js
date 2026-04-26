@@ -2,6 +2,11 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 
+const path = require('path');
+
+// Serve frontend
+app.use(express.static(path.join(__dirname, '../public')));
+
 let todos = [];
 let nextId = 1;
 
