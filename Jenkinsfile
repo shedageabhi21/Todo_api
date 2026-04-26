@@ -52,6 +52,14 @@ pipeline {
 
             }
         }
+        stage ("Check the application running for testing"){
+            steps{
+                input message: "Do you want to run the application for testing?", ok: "Run"
+                echo "Running the applicatino for 60 sec"
+                sh "npm start &"
+                sleep 60
+            }
+        }
         
             
         
