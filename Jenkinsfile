@@ -40,7 +40,7 @@ pipeline {
 
                     dependencyCheckPublisher pattern: 'dependency-check-report.xml', stopBuild: true, unstableTotalCritical: 1
 
-                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: './', reportFiles: 'dependency-check-report.html', reportName: 'dependency_check_HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+                    
                 }
             }
         }
@@ -48,10 +48,7 @@ pipeline {
             steps{
                 echo "Running the unit tests"
                 sh "npm test"
-
-                junit allowEmptyResults: true, testResults: 'test-results/junit.xml'
-
-                publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Code_coverage_HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+                
 
             }
         }
@@ -61,8 +58,11 @@ pipeline {
     }
     post{
         always{
-            echo "Cleaning up the workspace"
-        
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: './', reportFiles: 'dependency-check-report.html', reportName: 'dependency_check_HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+
+            junit allowEmptyResults: true, testResults: 'test-results/junit.xml'
+
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'coverage/lcov-report', reportFiles: 'index.html', reportName: 'Code_coverage_HTML Report', reportTitles: '', useWrapperFileDirectly: true])
         }
     }
 }
