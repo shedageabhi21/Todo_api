@@ -58,8 +58,8 @@ pipeline {
                 echo "Checking the application is running with old code and kill it and re-run."
                 if (sh(script: "ps | grep node", returnStatus: true) == 0) {
                     echo "Application is already running"
-                    sh "kill -9 $(sudo lsof -t -i:3000)"
-                    echo "Killed application process ID= $(sudo lsof -t -i:3000)"
+                    sh 'kill -9 $(sudo lsof -t -i:3000)'
+                    sh 'echo "Killed application process ID= $(sudo lsof -t -i:3000)"'
                 } else {
                     echo "We are running the application with the new code"
                     sh "npm start &"
