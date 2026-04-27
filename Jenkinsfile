@@ -63,8 +63,8 @@ pipeline {
                 } else {
                     echo "We are running the application with the new code"
                     sh "npm start &"
-                    sh "APP_PID=$!"
-                    echo "$APP_PID"
+                    sh 'APP_PID=$!'
+                    sh 'echo $APP_PID'
                 }
                 
             }
