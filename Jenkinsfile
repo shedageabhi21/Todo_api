@@ -65,13 +65,13 @@ pipeline {
                         echo "Application is already running with PID: ${oldPid}"
                         sh 'kill -9 $(sudo lsof -t -i:3000)'
                         echo "Old application killed! PID was: ${oldPid}"
-                        sleep(2)
+                        sleep 2
                     } else {
                         echo "No application running on port 3000"
                     }
                     echo "Starting application with new code..."
                     sh '''
-                        npm start &
+                        nohup npm start > app.log 2>&1 &
                         APP_PID=$!
                         echo "Application started with PID: $APP_PID"
                         sleep 3
