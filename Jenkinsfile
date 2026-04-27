@@ -56,16 +56,28 @@ pipeline {
             steps{
                 input message: "Do you want to run the application for testing?", ok: "Run"
                 echo "Checking the application is running with old code and kill it and re-run."
-                if (sh(script: "ps | grep node", returnStatus: true) == 0) {
-                    echo "Application is already running"
-                    sh 'kill -9 $(sudo lsof -t -i:3000)'
-                    sh 'echo "Killed application process ID= $(sudo lsof -t -i:3000)"'
-                } else {
-                    echo "We are running the application with the new code"
-                    sh "npm start &"
-                    sh 'APP_PID=$!'
-                    sh 'echo $APP_PID'
-                }
+                script{
+                    def portInUse = sh(script: 'sudo lsof -t -i:3000', returnStatus: true)
+
+                    if (portInUse == 0) {
+                        // Port is in use — kill the old app
+                        def oldPid = sh(script: 'sudo lsof -t -i:3000', returnStdout: true).trim()
+                        echo "Application is already running with PID: ${oldPid}"
+                        sh 'sudo kill -9 $(sudo lsof -t -i:3000)'
+                        echo "Old application killed! PID was: ${oldPid}"
+                        sleep(2)
+                    } else {
+                        echo "No application running on port 3000"
+                    }
+                    echo "Starting application with new code..."
+                    sh '''
+                        npm start &
+                        APP_PID=$!
+                        echo "Application started with PID: $APP_PID"
+                        sleep 3
+                        curl -f http://10.96.208.88:3000/ && echo "✅ App is running!"
+                    '''
+                }    
                 
             }
         }
