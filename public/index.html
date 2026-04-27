@@ -6,83 +6,302 @@
   <title>Todo App</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: sans-serif; background: #f5f5f5; min-height: 100vh; display: flex; justify-content: center; padding: 2rem 1rem; }
-    .app { width: 100%; max-width: 600px; }
-    h1 { font-size: 28px; font-weight: 600; color: #111; letter-spacing: -0.5px; }
-    .subtitle { font-size: 14px; color: #888; margin-top: 4px; margin-bottom: 1.5rem; }
-    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
-    .stat { background: #fff; border-radius: 10px; padding: 12px 16px; border: 1px solid #eee; }
-    .stat-label { font-size: 12px; color: #999; margin-bottom: 4px; }
-    .stat-value { font-size: 24px; font-weight: 600; color: #111; }
-    .input-row { display: flex; gap: 8px; margin-bottom: 1rem; }
-    .input-row input { flex: 1; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; outline: none; background: #fff; }
-    .input-row input:focus { border-color: #111; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 2rem 1rem;
+    }
+    .app {
+      width: 100%;
+      max-width: 620px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.5rem;
+    }
+    .header-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    .header p {
+      font-size: 13px;
+      color: #999;
+      margin-top: 2px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    .stat {
+      background: #f8f9ff;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      border: 1px solid #eef0ff;
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #667eea;
+    }
+    .stat-label {
+      font-size: 11px;
+      color: #999;
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1rem;
+    }
+    .input-row input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 2px solid #eef0ff;
+      border-radius: 12px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+      color: #1a1a2e;
+    }
+    .input-row input:focus {
+      border-color: #667eea;
+    }
     .input-row input::placeholder { color: #bbb; }
-    .btn-add { padding: 10px 20px; background: #111; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; }
-    .btn-add:hover { background: #333; }
-    .filters { display: flex; gap: 6px; margin-bottom: 1rem; }
-    .filter-btn { padding: 6px 14px; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; background: #fff; color: #666; cursor: pointer; }
-    .filter-btn.active { background: #111; color: #fff; border-color: #111; }
-    .todo-list { display: flex; flex-direction: column; gap: 8px; }
-    .todo-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: #fff; border: 1px solid #eee; border-radius: 12px; transition: border-color 0.15s; }
-    .todo-item:hover { border-color: #ccc; }
-    .todo-item.done { opacity: 0.6; }
-    .check { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid #ccc; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: transparent; }
-    .check.checked { background: #111; border-color: #111; }
-    .check.checked::after { content: ''; display: block; width: 6px; height: 10px; border: 2px solid #fff; border-top: none; border-left: none; transform: rotate(45deg) translateY(-1px); }
-    .todo-title { flex: 1; font-size: 15px; color: #111; }
-    .todo-item.done .todo-title { text-decoration: line-through; color: #aaa; }
-    .todo-tag { font-size: 11px; padding: 3px 8px; border-radius: 20px; background: #f0f0f0; color: #888; }
-    .btn-del { width: 28px; height: 28px; border: none; background: transparent; color: #ccc; cursor: pointer; border-radius: 6px; font-size: 18px; display: flex; align-items: center; justify-content: center; }
-    .btn-del:hover { background: #fff0f0; color: #e00; }
-    .empty { text-align: center; padding: 3rem 0; color: #bbb; font-size: 14px; }
-    .clear-btn { margin-top: 1.5rem; text-align: center; }
-    .clear-btn button { border: none; background: none; font-size: 13px; color: #aaa; cursor: pointer; text-decoration: underline; }
-    .clear-btn button:hover { color: #e00; }
-    .error { color: red; font-size: 13px; margin-top: 6px; display: none; }
+    .btn-add {
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+    .btn-add:hover { opacity: 0.85; }
+    .error {
+      color: #e74c3c;
+      font-size: 12px;
+      margin-bottom: 8px;
+      display: none;
+      padding-left: 4px;
+    }
+    .filters {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 1rem;
+    }
+    .filter-btn {
+      padding: 7px 16px;
+      border: 2px solid #eef0ff;
+      border-radius: 20px;
+      font-size: 13px;
+      background: #fff;
+      color: #999;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .filter-btn.active {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      border-color: transparent;
+    }
+    .todo-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: #fff;
+      border: 2px solid #eef0ff;
+      border-radius: 14px;
+      transition: all 0.2s;
+    }
+    .todo-item:hover {
+      border-color: #667eea;
+      box-shadow: 0 4px 12px rgba(102,126,234,0.1);
+    }
+    .todo-item.done { opacity: 0.6; background: #fafafa; }
+    .check {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid #ddd;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .check:hover { border-color: #667eea; }
+    .check.checked {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-color: transparent;
+    }
+    .check.checked::after {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 10px;
+      border: 2px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translateY(-1px);
+    }
+    .todo-title {
+      flex: 1;
+      font-size: 15px;
+      color: #1a1a2e;
+      font-weight: 500;
+    }
+    .todo-item.done .todo-title {
+      text-decoration: line-through;
+      color: #bbb;
+    }
+    .todo-tag {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: #f0fff4;
+      color: #27ae60;
+      font-weight: 600;
+    }
+    .btn-del {
+      width: 30px;
+      height: 30px;
+      border: none;
+      background: #fff5f5;
+      color: #e74c3c;
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .btn-del:hover { background: #e74c3c; color: #fff; }
+    .empty {
+      text-align: center;
+      padding: 3rem 0;
+      color: #bbb;
+      font-size: 14px;
+    }
+    .empty-icon { font-size: 40px; margin-bottom: 10px; }
+    .footer {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer span { font-size: 12px; color: #bbb; }
+    .clear-btn {
+      border: none;
+      background: none;
+      font-size: 12px;
+      color: #e74c3c;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .clear-btn:hover { text-decoration: underline; }
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: #999;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
   <div class="app">
-    <h1>My Tasks</h1>
-    <p class="subtitle">Stay on top of your work</p>
-
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-label">Total</div>
-        <div class="stat-value" id="stat-total">0</div>
+    <div class="card">
+      <div class="header">
+        <div class="header-icon">✅</div>
+        <div>
+          <h1>My Tasks</h1>
+          <p>Stay on top of your work</p>
+        </div>
       </div>
-      <div class="stat">
-        <div class="stat-label">Done</div>
-        <div class="stat-value" id="stat-done">0</div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-label">Total</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="stat-done">0</div>
+          <div class="stat-label">Done</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="stat-remaining">0</div>
+          <div class="stat-label">Remaining</div>
+        </div>
       </div>
-      <div class="stat">
-        <div class="stat-label">Remaining</div>
-        <div class="stat-value" id="stat-remaining">0</div>
+
+      <div class="input-row">
+        <input type="text" id="todo-input" placeholder="Add a new task..." />
+        <button class="btn-add" onclick="addTodo()">+ Add</button>
       </div>
-    </div>
+      <div class="error" id="error-msg">⚠️ Title is required!</div>
 
-    <div class="input-row">
-      <input type="text" id="todo-input" placeholder="Add a new task..." />
-      <button class="btn-add" onclick="addTodo()">Add task</button>
-    </div>
-    <div class="error" id="error-msg">Title is required!</div>
+      <div class="filters">
+        <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+        <button class="filter-btn" onclick="setFilter('active', this)">Active</button>
+        <button class="filter-btn" onclick="setFilter('done', this)">Done</button>
+      </div>
 
-    <div class="filters">
-      <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
-      <button class="filter-btn" onclick="setFilter('active', this)">Active</button>
-      <button class="filter-btn" onclick="setFilter('done', this)">Done</button>
-    </div>
+      <div class="todo-list" id="todo-list">
+        <div class="loading">Loading tasks...</div>
+      </div>
 
-    <div class="todo-list" id="todo-list"></div>
-
-    <div class="clear-btn">
-      <button onclick="clearDone()">Clear completed tasks</button>
+      <div class="footer">
+        <span id="footer-text">0 tasks</span>
+        <button class="clear-btn" onclick="clearDone()">Clear completed</button>
+      </div>
     </div>
   </div>
 
   <script>
     const API = '';
+    let filter = 'all';
 
     async function fetchTodos() {
       const res = await fetch(`${API}/todos`);
@@ -111,21 +330,26 @@
       await fetch(`${API}/todos/${id}`, { method: 'DELETE' });
     }
 
-    let filter = 'all';
-
     async function render() {
       const todos = await fetchTodos();
       const filtered = todos.filter(t =>
         filter === 'all' ? true : filter === 'done' ? t.done : !t.done
       );
       const done = todos.filter(t => t.done).length;
+
       document.getElementById('stat-total').textContent = todos.length;
       document.getElementById('stat-done').textContent = done;
       document.getElementById('stat-remaining').textContent = todos.length - done;
+      document.getElementById('footer-text').textContent = `${todos.length} task${todos.length !== 1 ? 's' : ''}`;
 
       const list = document.getElementById('todo-list');
+
       if (filtered.length === 0) {
-        list.innerHTML = '<div class="empty">No tasks here</div>';
+        list.innerHTML = `
+          <div class="empty">
+            <div class="empty-icon">🎉</div>
+            <div>${filter === 'done' ? 'No completed tasks yet' : filter === 'active' ? 'No active tasks!' : 'No tasks yet — add one above!'}</div>
+          </div>`;
         return;
       }
 
@@ -133,8 +357,8 @@
         <div class="todo-item ${t.done ? 'done' : ''}">
           <div class="check ${t.done ? 'checked' : ''}" onclick="toggle(${t.id}, ${t.done})"></div>
           <span class="todo-title">${t.title}</span>
-          ${t.done ? '<span class="todo-tag">done</span>' : ''}
-          <button class="btn-del" onclick="remove(${t.id})">&#x2715;</button>
+          ${t.done ? '<span class="todo-tag">✓ done</span>' : ''}
+          <button class="btn-del" onclick="remove(${t.id})" title="Delete">✕</button>
         </div>
       `).join('');
     }
@@ -143,10 +367,7 @@
       const input = document.getElementById('todo-input');
       const title = input.value.trim();
       const error = document.getElementById('error-msg');
-      if (!title) {
-        error.style.display = 'block';
-        return;
-      }
+      if (!title) { error.style.display = 'block'; return; }
       error.style.display = 'none';
       await createTodo(title);
       input.value = '';
@@ -165,8 +386,7 @@
 
     async function clearDone() {
       const todos = await fetchTodos();
-      const doneTodos = todos.filter(t => t.done);
-      await Promise.all(doneTodos.map(t => deleteTodoApi(t.id)));
+      await Promise.all(todos.filter(t => t.done).map(t => deleteTodoApi(t.id)));
       render();
     }
 
