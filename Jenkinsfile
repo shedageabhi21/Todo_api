@@ -3,6 +3,9 @@ pipeline {
     tools {
         nodejs 'Node-24'
     }
+    environment {
+        JENKINS_NODE_COOKIE = 'dontKillMe'   // ✅ applies to entire pipeline
+    }
     stages{
         stage("Checkout code"){
             steps{
