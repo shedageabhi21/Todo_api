@@ -64,6 +64,7 @@ pipeline {
                     echo "We are running the application with the new code"
                     sh "npm start &"
                     sh "APP_PID=$!"
+                    echo "$APP_PID"
                 }
                 
             }
