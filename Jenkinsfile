@@ -57,13 +57,13 @@ pipeline {
                 input message: "Do you want to run the application for testing?", ok: "Run"
                 echo "Checking the application is running with old code and kill it and re-run."
                 script{
-                    def portInUse = sh(script: 'sudo lsof -t -i:3000', returnStatus: true)
+                    def portInUse = sh(script: 'lsof -t -i:3000', returnStatus: true)
 
                     if (portInUse == 0) {
                         // Port is in use — kill the old app
-                        def oldPid = sh(script: 'sudo lsof -t -i:3000', returnStdout: true).trim()
+                        def oldPid = sh(script: 'lsof -t -i:3000', returnStdout: true).trim()
                         echo "Application is already running with PID: ${oldPid}"
-                        sh 'sudo kill -9 $(sudo lsof -t -i:3000)'
+                        sh 'kill -9 $(sudo lsof -t -i:3000)'
                         echo "Old application killed! PID was: ${oldPid}"
                         sleep(2)
                     } else {
