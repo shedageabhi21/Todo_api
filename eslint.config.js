@@ -11,6 +11,8 @@ module.exports = [
         exports: "readonly",
         process: "readonly",
         console: "readonly",
+        __dirname: "readonly",
+        __filename: "readonly",
         describe: "readonly",
         it: "readonly",
         expect: "readonly",
