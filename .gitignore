@@ -1,2 +1,8 @@
 node_modules/
 coverage/
+test-results/
+dependency-check-report.*
+.env
+*.log
+app.log
+.scannerwork/
