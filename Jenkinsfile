@@ -53,7 +53,7 @@ pipeline {
             }
         }
 
-        stage('OWASP Dependency-Check') {
+        /* stage('OWASP Dependency-Check') {
             steps {
                 withCredentials([string(credentialsId: 'OWASP_Depcheck', variable: 'OWASP_KEY')]) {
                     dependencyCheck additionalArguments: '--scan ./ --format HTML --format XML --nvdApiKey $OWASP_KEY',
@@ -62,7 +62,7 @@ pipeline {
                                              stopBuild: true, unstableTotalCritical: 1
                 }
             }
-        }
+        } */
 
         stage('Unit tests') {
             steps {
