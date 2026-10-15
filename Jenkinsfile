@@ -73,8 +73,8 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 // 'sonarqube' = server name and 'SonarScanner' = tool name in Manage Jenkins
-                withSonarQubeEnv('sonarqube') {
-                    sh "${tool 'SonarScanner'}/bin/sonar-scanner"
+                withSonarQubeEnv('Sonar-server') {
+                    sh "/opt/sonar-scanner/bin/sonar-scanner"
                 }
             }
         }
