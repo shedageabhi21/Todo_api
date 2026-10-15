@@ -22,7 +22,7 @@ pipeline {
     environment {
         IMAGE_NAME   = 'todo-api'
         AWS_REGION   = 'ap-south-1'
-        ECR_REGISTRY = '216016752342.dkr.ecr.ap-south-1.amazonaws.com/'
+        ECR_REGISTRY = '216016752342.dkr.ecr.ap-south-1.amazonaws.com'
         PLATFORM_REPO = 'git@github.com:shedageabhi21/devsecops-platform.git'
     }
 
