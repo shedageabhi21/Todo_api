@@ -15,12 +15,14 @@ pipeline {
     parameters {
         booleanParam(name: 'PUSH_IMAGE', defaultValue: false,
             description: 'Push the image to ECR and update the GitOps repo (enable once AWS is ready)')
+        booleanParam(name: 'UPDATE_GITOPS', defaultValue: false,
+            description: 'Commit the new image tag to the platform repo (needs helm/app/values.yaml and the deploy key)')
     }
 
     environment {
         IMAGE_NAME   = 'todo-api'
         AWS_REGION   = 'ap-south-1'
-        ECR_REGISTRY = '<aws-account-id>.dkr.ecr.ap-south-1.amazonaws.com'
+        ECR_REGISTRY = '216016752342.dkr.ecr.ap-south-1.amazonaws.com/'
         PLATFORM_REPO = 'git@github.com:shedageabhi21/devsecops-platform.git'
     }
 
@@ -117,7 +119,7 @@ pipeline {
         }
 
         stage('Update GitOps repo') {
-            when { expression { params.PUSH_IMAGE } }
+            when { expression { params.UPDATE_GITOPS } }
             steps {
                 // 'platform-repo-key' = SSH deploy key (write access) stored in Jenkins credentials
                 sshagent(credentials: ['platform-repo-key']) {
