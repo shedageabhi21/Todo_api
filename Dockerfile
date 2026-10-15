@@ -9,12 +9,16 @@ FROM node:24-alpine
 ENV NODE_ENV=production PORT=3000
 WORKDIR /app
 
+# Remove npm/yarn from the runtime image (not needed to run the app)
+RUN rm -rf /usr/local/lib/node_modules/npm \
+           /usr/local/bin/npm /usr/local/bin/npx \
+           /opt/yarn-* /usr/local/bin/yarn /usr/local/bin/yarnpkg
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY package.json ./
 COPY src ./src
 COPY public ./public
 
-# Run as the unprivileged "node" user that ships with the image
 USER node
 EXPOSE 3000
 
