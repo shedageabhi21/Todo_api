@@ -121,9 +121,16 @@ pipeline {
         stage('Update GitOps repo') {
             when { expression { params.UPDATE_GITOPS } }
             steps {
-                // 'platform-repo-key' = SSH deploy key (write access) stored in Jenkins credentials
-                sshagent(credentials: ['platform-repo-key']) {
+                withCredentials([usernamePassword(credentialsId: 'Github_auth_token',
+                                                  usernameVariable: 'GIT_USER',
+                                                  passwordVariable: 'GIT_TOKEN')]) {
                     sh '''
+                        # Credential helper reads the env vars, so the token never lands in a URL or .git/config
+                        export GIT_TERMINAL_PROMPT=0
+                        export GIT_CONFIG_COUNT=1
+                        export GIT_CONFIG_KEY_0=credential.helper
+                        export GIT_CONFIG_VALUE_0='!f() { echo "username=${GIT_USER}"; echo "password=${GIT_TOKEN}"; }; f'
+
                         rm -rf platform && git clone ${PLATFORM_REPO} platform
                         cd platform
                         sed -i "s|^  tag:.*|  tag: \\"${IMAGE_TAG}\\"|" helm/app/values.yaml
